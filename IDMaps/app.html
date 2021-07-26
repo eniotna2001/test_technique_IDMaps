@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>app</title>
+    <meta charset='UTF-8'>
+    <link rel="stylesheet" type="text/css" href="app.css">
+</head>
+
+
+<div id="app">
+	<div v-if="id==0">
+	{{infos}}
+	{{ separe() }}
+		<div v-for="titre in infos">
+  			{{ addinfo( titre ) }}
+  		</div>
+  	</div>
+	<div v-for="word in listtitre">
+    	<div v-show="word.isShow" class=affiche>
+			<label>{{word.mot}}</label>
+      		<img src="croix.png" @click="word.isShow= !word.isShow">
+    	</div>
+	</div>
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/vue"></script>
+<script>
+	new Vue({
+		el: '#app',
+		data() {
+			return {
+				infos: [],
+				listtitre:[],
+				id:0
+			}
+		},
+		mounted (){
+			axios
+			.get('https://jsonplaceholder.typicode.com/todos')
+			.then(response=>(this.infos = response.data[0].title))
+			.catch(error => console.log(error))
+		},
+		methods:{
+        addinfo(titre){
+      		this.listtitre.push({isShow:true, mot:titre});
+      		this.id = this.id+1
+    	},
+        separe(){
+            this.infos = this.infos.split(" ");
+        }
+	}
+})
+</script>
