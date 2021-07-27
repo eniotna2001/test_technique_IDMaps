@@ -8,13 +8,6 @@
 
 
 <div id="app">
-	<div v-if="id==0">
-	{{infos}}
-	{{ separe() }}
-		<div v-for="titre in infos">
-  			{{ addinfo( titre ) }}
-  		</div>
-  	</div>
 	<div v-for="word in listtitre">
     	<div v-show="word.isShow" class=affiche>
 			<label>{{word.mot}}</label>
@@ -30,25 +23,19 @@
 		el: '#app',
 		data() {
 			return {
-				infos: [],
-				listtitre:[],
-				id:0
+				tlisttitreitle:[]
 			}
 		},
 		mounted (){
 			axios
 			.get('https://jsonplaceholder.typicode.com/todos')
-			.then(response=>(this.infos = response.data[0].title))
+			.then(
+				response => response.data[0].title.split(' ').forEach(
+					word => {
+						this.listtitre.push({'mot': word, 'isShow': true})
+					})
+			)
 			.catch(error => console.log(error))
-		},
-		methods:{
-        addinfo(titre){
-      		this.listtitre.push({isShow:true, mot:titre});
-      		this.id = this.id+1
-    	},
-        separe(){
-            this.infos = this.infos.split(" ");
-        }
-	}
-})
+		}
+	})
 </script>
